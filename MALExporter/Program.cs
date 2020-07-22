@@ -38,6 +38,8 @@ namespace MALExporter
             {
                 Console.WriteLine("Key: " + field.Key + ", Value: " + field.Value);
             }
+
+            representation1["test1"] = representation1["test3"];
         }
     }
 }

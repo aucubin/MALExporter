@@ -24,6 +24,27 @@ namespace InternalRepresentation
             }
         }
 
+        public Representation this[int index]
+        {
+            get
+            {
+                return _representations[index];
+            }
+
+            set
+            {
+                _representations[index] = value;
+            }
+        }
+
+        public int Count
+        {
+            get
+            {
+                return _representations.Count;
+            }
+        }
+
         public Representation CreateNewRepresentation()
         {
             _representations.Add(new Representation(_representationTemplate));

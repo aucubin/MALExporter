@@ -21,9 +21,7 @@ namespace InternalRepresentation
             FieldType = fieldType;
         }
 
-        public string FieldName {
-            get;
-        }
+        public readonly string FieldName;
 
         public FieldType FieldType
         {

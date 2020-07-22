@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace InternalRepresentation
@@ -33,6 +34,10 @@ namespace InternalRepresentation
             }
             set
             {
+                if(value.FieldName != name)
+                {
+                    throw new ArgumentException("Reassigning of Field is not allowed if new Field has another Field Name than old Field.");
+                }
                 _fields[name] = value;
             }
         }
