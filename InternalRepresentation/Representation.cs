@@ -32,7 +32,7 @@ namespace InternalRepresentation
             _fields = new Dictionary<string, Field>();
             foreach(ImmutableField field in template.Fields)
             {
-                _fields.Add(field.FieldName, (ImmutableField)field.Clone());
+                _fields.Add(field.FieldName, new ImmutableField(field));
             }
         }
 

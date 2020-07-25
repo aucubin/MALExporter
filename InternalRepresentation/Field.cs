@@ -11,7 +11,7 @@ namespace InternalRepresentation
         Invalid
     }
 
-    public class Field : ICloneable
+    public class Field
     {
         public Field(string fieldName) : this(fieldName, FieldType.Invalid) { }
 
@@ -137,11 +137,6 @@ namespace InternalRepresentation
                     break;
             }
             return sb.ToString();
-        }
-
-        public object Clone()
-        {
-            return new Field(this);
         }
     }
 }

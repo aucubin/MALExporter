@@ -2,7 +2,7 @@
 
 namespace InternalRepresentation
 {
-    public class ImmutableField : Field, ICloneable
+    public class ImmutableField : Field
     {
         public ImmutableField(string fieldName) : base(fieldName) { }
 
@@ -23,11 +23,6 @@ namespace InternalRepresentation
         public new string StringValue
         {
             get;
-        }
-
-        public new object Clone()
-        {
-            return new ImmutableField(this);
         }
     }
 }
