@@ -7,6 +7,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InternalRepresentation\InternalRepresentation.csproj" />
+    <ProjectReference Include="..\XmlParsing\XmlParsing.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 
 namespace InternalRepresentation
 {
@@ -8,7 +9,7 @@ namespace InternalRepresentation
     {
         private Dictionary<string,Field> _fields;
 
-        public Representation(List<Field> fields)
+        public Representation(IEnumerable<Field> fields)
         {
             _fields = new Dictionary<string, Field>();
             foreach(Field field in fields)
@@ -17,12 +18,21 @@ namespace InternalRepresentation
             }
         }
 
-        public Representation(List<string> fieldNames)
+        public Representation(IEnumerable<string> fieldNames)
         {
             _fields = new Dictionary<string, Field>();
             foreach(string fieldName in fieldNames)
             {
                 _fields.Add(fieldName,new Field(fieldName));
+            }
+        }
+
+        internal Representation(RepresentationTemplate template)
+        {
+            _fields = new Dictionary<string, Field>();
+            foreach(ImmutableField field in template.Fields)
+            {
+                _fields.Add(field.FieldName, (ImmutableField)field.Clone());
             }
         }
 
@@ -58,6 +68,17 @@ namespace InternalRepresentation
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _fields.GetEnumerator();
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach(var field in _fields)
+            {
+                sb.Append(field.Value.ToString());
+                sb.Append(Environment.NewLine);
+            }
+            return sb.ToString();
         }
     }
 }

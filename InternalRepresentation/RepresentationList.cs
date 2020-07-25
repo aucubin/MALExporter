@@ -1,27 +1,24 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace InternalRepresentation
 {
     public class RepresentationList : IEnumerable<Representation>
     {
         private List<Representation> _representations;
-        private readonly List<Field>_representationTemplate;
+        private readonly RepresentationTemplate _representationTemplate;
 
-        public RepresentationList(List<Field> representation)
+        public RepresentationList(IEnumerable<Field> representation)
         {
-            _representationTemplate = representation;
+            _representationTemplate = new RepresentationTemplate(representation);
             _representations = new List<Representation>();
         }
 
-        public RepresentationList(List<string> fieldNames)
+        public RepresentationList(IEnumerable<string> fieldNames)
         {
-            _representationTemplate = new List<Field>();
+            _representationTemplate = new RepresentationTemplate(fieldNames);
             _representations = new List<Representation>();
-            foreach(string fieldName in fieldNames)
-            {
-                _representationTemplate.Add(new Field(fieldName));
-            }
         }
 
         public Representation this[int index]
@@ -48,7 +45,7 @@ namespace InternalRepresentation
         public Representation CreateNewRepresentation()
         {
             _representations.Add(new Representation(_representationTemplate));
-            return _representations[^1];
+            return _representations.Last();
         }
 
         public IEnumerator<Representation> GetEnumerator()

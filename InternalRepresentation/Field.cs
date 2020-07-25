@@ -11,7 +11,7 @@ namespace InternalRepresentation
         Invalid
     }
 
-    public class Field
+    public class Field : ICloneable
     {
         public Field(string fieldName) : this(fieldName, FieldType.Invalid) { }
 
@@ -21,12 +21,29 @@ namespace InternalRepresentation
             FieldType = fieldType;
         }
 
+        public Field(Field field) : this(field.FieldName)
+        {
+            FieldType = field.FieldType;
+            switch (FieldType)
+            {
+                case FieldType.Boolean:
+                    BoolValue = field.BoolValue;
+                    break;
+                case FieldType.Integer:
+                    IntValue = field.IntValue;
+                    break;
+                case FieldType.String:
+                    StringValue = field.StringValue;
+                    break;
+            }
+        }
+
         public readonly string FieldName;
 
         public FieldType FieldType
         {
             get;
-            private set;
+            protected set;
         }
 
         private bool _boolValue;
@@ -120,6 +137,11 @@ namespace InternalRepresentation
                     break;
             }
             return sb.ToString();
+        }
+
+        public object Clone()
+        {
+            return new Field(this);
         }
     }
 }
