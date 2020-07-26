@@ -1,10 +1,11 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace InternalRepresentation
 {
-    public class RepresentationList : IEnumerable<Representation>
+    public class RepresentationList : IEnumerable<Representation>, IEquatable<RepresentationList>
     {
         private List<Representation> _representations;
         private readonly RepresentationTemplate _representationTemplate;
@@ -56,6 +57,24 @@ namespace InternalRepresentation
         IEnumerator IEnumerable.GetEnumerator()
         {
             return _representations.GetEnumerator();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as RepresentationList);
+        }
+
+        public bool Equals(RepresentationList other)
+        {
+            return other != null &&
+                   EqualityComparer<List<Representation>>.Default.Equals(_representations, other._representations) &&
+                   EqualityComparer<RepresentationTemplate>.Default.Equals(_representationTemplate, other._representationTemplate) &&
+                   Count == other.Count;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_representations, _representationTemplate, Count);
         }
     }
 }

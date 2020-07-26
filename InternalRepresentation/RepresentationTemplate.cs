@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace InternalRepresentation
 {
-    internal class RepresentationTemplate
+    internal class RepresentationTemplate : IEquatable<RepresentationTemplate>
     {
         private readonly List<ImmutableField> _fields;
 
@@ -30,6 +31,22 @@ namespace InternalRepresentation
             {
                 _fields.Add(new ImmutableField(field));
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as RepresentationTemplate);
+        }
+
+        public bool Equals(RepresentationTemplate other)
+        {
+            return other != null &&
+                   EqualityComparer<List<ImmutableField>>.Default.Equals(_fields, other._fields);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_fields);
         }
     }
 }

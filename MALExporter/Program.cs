@@ -26,40 +26,18 @@ namespace MALExporter
             {
                 Console.WriteLine(representations.ToString());
             }
-        }
 
-        static void RepresentationTests()
-        {
-            var representation = new Representation(new List<string>()
-            {
-                "test", "test2"
-            });
-
-            representation["test"].StringValue = "test";
-            representation["test2"].StringValue = "test2";
-
-            foreach (var field in representation)
-            {
-                Console.WriteLine("Key: " + field.Key + ", Value: " + field.Value);
-            }
-
-            Console.WriteLine();
-
-            var representationSet = new RepresentationList(new List<string>()
+            List<string> testFields = new List<string>()
             {
                 "test1",
                 "test2",
                 "test3"
-            });
+            };
 
-            var representation1 = representationSet.CreateNewRepresentation();
-            representation1["test1"].StringValue = "test2";
-            representation1["test3"].IntValue = -10;
+            Representation r1 = new Representation(testFields);
+            Representation r2 = new Representation(testFields);
 
-            foreach (var field in representation1)
-            {
-                Console.WriteLine("Key: " + field.Key + ", Value: " + field.Value);
-            }
+            Console.WriteLine(r1.Equals(r2));
         }
     }
 }

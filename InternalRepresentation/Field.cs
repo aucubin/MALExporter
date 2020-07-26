@@ -11,7 +11,7 @@ namespace InternalRepresentation
         Invalid
     }
 
-    public class Field
+    public class Field : IEquatable<Field>
     {
         public Field(string fieldName) : this(fieldName, FieldType.Invalid) { }
 
@@ -137,6 +137,26 @@ namespace InternalRepresentation
                     break;
             }
             return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Field);
+        }
+
+        public bool Equals(Field other)
+        {
+            return other != null &&
+                   FieldName == other.FieldName &&
+                   FieldType == other.FieldType &&
+                   _boolValue == other._boolValue &&
+                   _intValue == other._intValue &&
+                   _stringValue == other._stringValue;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(FieldName, FieldType, _boolValue, _intValue, _stringValue);
         }
     }
 }

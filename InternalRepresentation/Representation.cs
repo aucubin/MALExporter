@@ -5,7 +5,7 @@ using System.Text;
 
 namespace InternalRepresentation
 {
-    public class Representation : IEnumerable<KeyValuePair<string,Field>>
+    public class Representation : IEnumerable<KeyValuePair<string,Field>>, IEquatable<Representation>
     {
         private Dictionary<string,Field> _fields;
 
@@ -32,7 +32,7 @@ namespace InternalRepresentation
             _fields = new Dictionary<string, Field>();
             foreach(ImmutableField field in template.Fields)
             {
-                _fields.Add(field.FieldName, new ImmutableField(field));
+                _fields.Add(field.FieldName, new Field(field));
             }
         }
 
@@ -79,6 +79,23 @@ namespace InternalRepresentation
                 sb.Append(Environment.NewLine);
             }
             return sb.ToString();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Representation);
+        }
+
+        public bool Equals(Representation other)
+        {
+            return other != null &&
+                   RepresentationFieldEqualityComparer.EqualityComparer.Equals(_fields, other._fields) &&
+                   Count == other.Count;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(RepresentationFieldEqualityComparer.EqualityComparer.GetHashCode(_fields), Count);
         }
     }
 }
