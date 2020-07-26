@@ -9,7 +9,6 @@ namespace MALExporter
     {
         static void Main()
         {
-            //RepresentationTests();
             HashSet<string> fieldsToParse = new HashSet<string>()
             {
                 "manga_title",
@@ -20,7 +19,28 @@ namespace MALExporter
                 "my_score",
                 "my_times_read"
             };
-            XmlParser xml = new XmlParser(@"C:\Users\aucubin\Downloads\mangalist_1595159211_-_4711685.xml\mangalist_1595159211_-_4711685.xml", "manga", fieldsToParse);
+
+            List<Tuple<string, string>> fieldsToParseRename = new List<Tuple<string, string>>()
+            {
+                new Tuple<string,string>("manga_title","Title"),
+                new Tuple<string,string>("manga_volumes","Volumes"),
+                new Tuple<string,string>("manga_chapters","Chapters"),
+                new Tuple<string,string>("my_read_volumes","Read Volumes"),
+                new Tuple<string,string>("my_read_chapters","Read Chapters"),
+                new Tuple<string,string>("my_score","Score"),
+                new Tuple<string,string>("my_times_read","Times Read")
+            };
+            XmlParser xml;
+            bool rename = true;
+            string path = @"C:\Users\aucubin\Downloads\mangalist_1595159211_-_4711685.xml\mangalist_1595159211_-_4711685.xml";
+            if (rename)
+            {
+                xml = new XmlParser(path, "manga", fieldsToParseRename);
+            }
+            else
+            {
+                xml = new XmlParser(path, "manga", fieldsToParse);
+            }
             xml.ParseXML();
             foreach(var representations in xml.ParsedXml)
             {
