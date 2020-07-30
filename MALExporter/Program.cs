@@ -1,13 +1,19 @@
-﻿using InternalRepresentation;
+﻿using CliFx;
+using CliFx.Attributes;
+using InternalRepresentation;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using XmlParsing;
 
 namespace MALExporter
 {
-    class Program
+    public class Program
     {
-        static void Main()
+        public static async Task<int> Main() =>
+            await new CliApplicationBuilder().AddCommandsFromThisAssembly().Build().RunAsync();
+
+        public static void TestMain()
         {
             HashSet<string> fieldsToParse = new HashSet<string>()
             {
@@ -58,6 +64,17 @@ namespace MALExporter
             Representation r2 = new Representation(testFields);
 
             Console.WriteLine(r1.Equals(r2));
+        }
+    }
+
+    [Command]
+    public class Command : ICommand
+    {
+        public ValueTask ExecuteAsync(IConsole console)
+        {
+            Program.TestMain();
+
+            return default;
         }
     }
 }
