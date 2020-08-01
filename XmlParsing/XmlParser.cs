@@ -49,6 +49,29 @@ namespace XmlParsing
             hasRenaming = true;
         }
 
+        public static IEnumerable<string> GenerateListOfAllFields(string filePath, string elementTag)
+        {
+            HashSet<string> hashSet = new HashSet<string>();
+            XmlDocument xml = new XmlDocument();
+
+            xml.Load(filePath);
+
+            XmlNode rootNode = xml.DocumentElement;
+
+            foreach(XmlNode node in rootNode.ChildNodes)
+            {
+                if(node.Name == elementTag)
+                {
+                    foreach(XmlNode childNode in node.ChildNodes)
+                    {
+                        hashSet.Add(childNode.Name);
+                    }
+                }
+            }
+
+            return hashSet;
+        }
+
         public void ParseXML()
         {
             _xmlFile.Load(FilePath);

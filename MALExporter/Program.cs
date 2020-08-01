@@ -3,6 +3,7 @@ using CliFx.Attributes;
 using InternalRepresentation;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using XmlParsing;
 
@@ -13,7 +14,7 @@ namespace MALExporter
         public static async Task<int> Main() =>
             await new CliApplicationBuilder().AddCommandsFromThisAssembly().Build().RunAsync();
 
-        public static void TestMain()
+        internal static void TestMain()
         {
             HashSet<string> fieldsToParse = new HashSet<string>()
             {
@@ -48,10 +49,7 @@ namespace MALExporter
                 xml = new XmlParser(path, "manga", fieldsToParse);
             }
             xml.ParseXML();
-            foreach(var representations in xml.ParsedXml)
-            {
-                Console.WriteLine(representations.ToString());
-            }
+            Console.WriteLine(xml.ParsedXml.ToString());
 
             List<string> testFields = new List<string>()
             {
@@ -64,16 +62,70 @@ namespace MALExporter
             Representation r2 = new Representation(testFields);
 
             Console.WriteLine(r1.Equals(r2));
+
+            IEnumerable<string> test = XmlParser.GenerateListOfAllFields(path, "manga");
+
+            foreach(string s in test)
+            {
+                Console.WriteLine(s);
+            }
         }
     }
 
     [Command]
     public class Command : ICommand
     {
+        [CommandParameter(0, Description = "Filename of input file")]
+        public string FileName { get; set; }
+
+        [CommandParameter(1, Description = "XML Tag to start parsing from")]
+        public string Tag { get; set; }
+
+        [CommandOption("csv", Description = "Filename of csv to export into")]
+        public string CSVFile { get; set; }
+
+        [CommandOption("fields", 'f', Description = "Optional comma seperated list with fields to read in and optional rewriting scheme")]
+        public CommaSeperatedListWithAssignment Fields { get; set; }
+
+        public ValueTask ExecuteAsync(IConsole console)
+        {
+            if(CSVFile != null)
+            {
+                throw new ArgumentException("Export to CSV is not supported yet");
+            }
+
+            IEnumerable<Tuple<string, string>> outFields;
+            if (Fields != null)
+            {
+                outFields = Fields.ParsedList;
+            }
+            else
+            {
+                List<Tuple<string, string>> tmpList = new List<Tuple<string, string>>();
+                foreach (string field in XmlParser.GenerateListOfAllFields(FileName, Tag))
+                {
+                    tmpList.Add(new Tuple<string, string>(field, field));
+
+                }
+                outFields = tmpList;
+            }
+
+            XmlParser xml = new XmlParser(FileName, Tag, outFields);
+
+            xml.ParseXML();
+
+            console.Output.WriteLine(xml.ParsedXml.ToString());
+
+            return default;
+        }
+    }
+
+    [Command("test")]
+    public class TestCommand : ICommand
+    {
         public ValueTask ExecuteAsync(IConsole console)
         {
             Program.TestMain();
-
             return default;
         }
     }

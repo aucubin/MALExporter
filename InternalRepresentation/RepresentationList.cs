@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace InternalRepresentation
 {
@@ -75,6 +76,17 @@ namespace InternalRepresentation
         public override int GetHashCode()
         {
             return HashCode.Combine(_representations, _representationTemplate, Count);
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach(var representation in _representations)
+            {
+                sb.Append(representation.ToString());
+                sb.Append(Environment.NewLine);
+            }
+            return sb.ToString();
         }
     }
 }
