@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<root>
+	<child>
+		<test>TestValue</test>
+		<test2>Party</test2>
+	</child>
+	<child>
+		<test>Lel</test>
+		<test3>lelu</test3>
+	</child>
+</root>
