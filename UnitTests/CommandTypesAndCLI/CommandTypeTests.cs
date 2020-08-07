@@ -4,9 +4,9 @@ using System.Linq;
 using System.Collections.Generic;
 using System;
 
-namespace UnitTests.CommandParsing
+namespace UnitTests.CommandTypesAndCLI
 {
-    public class CommandParserTests
+    public class CommandTypeTests
     {
 
         [Fact]
