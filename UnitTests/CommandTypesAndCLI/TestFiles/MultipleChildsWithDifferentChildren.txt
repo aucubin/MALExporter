@@ -1,0 +1,7 @@
+﻿FieldName: test, FieldType: String, Value: TestValue
+FieldName: test2, FieldType: String, Value: Party
+FieldName: test3, FieldType: Invalid, Value: Invalid
+
+FieldName: test, FieldType: String, Value: Lel
+FieldName: test2, FieldType: Invalid, Value: Invalid
+FieldName: test3, FieldType: String, Value: lelu
