@@ -1,9 +1,9 @@
 ﻿using CliFx;
 using CliFx.Attributes;
+using Export;
 using InternalRepresentation;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using XmlParsing;
 
@@ -87,13 +87,11 @@ namespace MALExporter
         [CommandOption("fields", 'f', Description = "Optional comma seperated list with fields to read in and optional rewriting scheme")]
         public CommaSeperatedListWithAssignment Fields { get; set; }
 
+        [CommandOption("force", Description = "Overwrite output file if it already exists")]
+        public bool OverwriteFile { get; set; }
+
         public ValueTask ExecuteAsync(IConsole console)
         {
-            if(CSVFile != null)
-            {
-                throw new ArgumentException("Export to CSV is not supported yet");
-            }
-
             IEnumerable<Tuple<string, string>> outFields;
             if (Fields != null)
             {
@@ -114,7 +112,15 @@ namespace MALExporter
 
             xml.ParseXML();
 
-            console.Output.WriteLine(xml.ParsedXml.ToString());
+            if (CSVFile != null)
+            {
+                CSVExport export = new CSVExport(CSVFile, OverwriteFile, xml.ParsedXml);
+                export.Export();
+            }
+            else
+            {
+                console.Output.WriteLine(xml.ParsedXml.ToString());
+            }
 
             return default;
         }

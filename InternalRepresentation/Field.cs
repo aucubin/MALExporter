@@ -139,6 +139,22 @@ namespace InternalRepresentation
             return sb.ToString();
         }
 
+        public string ValueAsString()
+        {
+            switch (FieldType)
+            {
+                case FieldType.Boolean:
+                    return BoolValue.ToString();
+                case FieldType.Integer:
+                    return IntValue.ToString();
+                case FieldType.String:
+                    return StringValue;
+                case FieldType.Invalid:
+                default:
+                    throw new ArgumentException("Field is invalid");
+            }
+        }
+
         public override bool Equals(object obj)
         {
             return Equals(obj as Field);
