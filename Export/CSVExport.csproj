@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AssemblyName>Export.CSVExport</AssemblyName>
+    <RootNamespace>Export.CSVExport</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
