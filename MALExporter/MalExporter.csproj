@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Export\CSVExport.csproj" />
+    <ProjectReference Include="..\Export\CSVExport\CSVExport.csproj" />
     <ProjectReference Include="..\InternalRepresentation\InternalRepresentation.csproj" />
     <ProjectReference Include="..\XmlParsing\XmlParsing.csproj" />
   </ItemGroup>

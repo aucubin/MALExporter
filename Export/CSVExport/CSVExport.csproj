@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\InternalRepresentation\InternalRepresentation.csproj" />
+    <ProjectReference Include="..\..\InternalRepresentation\InternalRepresentation.csproj" />
   </ItemGroup>
 
 </Project>
