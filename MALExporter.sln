@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XmlParsing", "XmlParsing\Xm
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTests", "UnitTests\UnitTests.csproj", "{247FA924-4E6A-4AF6-A4C7-BE0F9DF9FD33}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Export", "Export\Export.csproj", "{D139132B-D678-473B-94D0-9691D8CE1ABE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVExport", "Export\CSVExport.csproj", "{D139132B-D678-473B-94D0-9691D8CE1ABE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{A35B5184-B859-4112-A8AD-F05B73439BB6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +44,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D139132B-D678-473B-94D0-9691D8CE1ABE} = {A35B5184-B859-4112-A8AD-F05B73439BB6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {594F16E7-849A-4775-80B5-3C555C3FD4A8}

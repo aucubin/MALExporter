@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace Export
+namespace Export.CSVExport
 {
     public class CSVExport
     {

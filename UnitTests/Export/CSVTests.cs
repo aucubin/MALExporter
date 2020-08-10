@@ -3,8 +3,7 @@ using System.IO;
 using System;
 using System.Collections.Generic;
 using XmlParsing;
-using Export;
-using System.Text;
+using Export.CSVExport;
 
 namespace UnitTests.Export
 {

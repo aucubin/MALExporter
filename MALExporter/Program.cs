@@ -1,6 +1,6 @@
 ﻿using CliFx;
 using CliFx.Attributes;
-using Export;
+using Export.CSVExport;
 using InternalRepresentation;
 using System;
 using System.Collections.Generic;
