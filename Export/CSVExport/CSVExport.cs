@@ -1,4 +1,5 @@
 ﻿using InternalRepresentation;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
@@ -10,11 +11,17 @@ namespace Export.CSVExport
         private readonly bool OverwriteFile;
         private readonly RepresentationList Representations;
 
+        // used to get a order in which the fields are appended to the csv file as fields
+        // in one representation can potentially be sorted in another order than in another representation of the same representationlist
+        // (dictionary class from C# does not specify order in which its keys are ordered)
+        private readonly List<string> fieldOrdering;
+
         public CSVExport(string filePath, bool overwriteFile, RepresentationList representations)
         {
             FilePath = filePath;
             OverwriteFile = overwriteFile;
             Representations = representations;
+            fieldOrdering = new List<string>();
         }
 
         public void Export()
@@ -54,6 +61,7 @@ namespace Export.CSVExport
                     sb.Append(',');
                 }
                 sb.Append(pair.Key);
+                fieldOrdering.Add(pair.Key);
             }
             return sb.ToString();
         }
@@ -61,16 +69,17 @@ namespace Export.CSVExport
         private string CreateCSVRow(Representation rep)
         {
             StringBuilder sb = new StringBuilder();
-            foreach(var pair in rep)
+            foreach(var fieldOrder in fieldOrdering)
             {
+                var field = rep[fieldOrder];
                 if(sb.Length != 0)
                 {
                     sb.Append(',');
                 }
 
-                if(pair.Value.FieldType != FieldType.Invalid)
+                if(field.FieldType != FieldType.Invalid)
                 {
-                    sb.Append(pair.Value.ValueAsString());
+                    sb.Append(field.ValueAsString());
                 }
             }
             return sb.ToString();
