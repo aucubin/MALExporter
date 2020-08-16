@@ -12,6 +12,7 @@ namespace Export.SQLExport
 
         private const string createStatement = @"CREATE TABLE {0} \n ({1}); ";
         private const string insertStatement = @"INSERT INTO {0} ({1}) VALUES \n {2};";
+        private const string truncateStatement = @"TRUNCATE {0};";
 
         public SQLTable(string tableName, Representation basisRepresentation)
         {
@@ -41,7 +42,7 @@ namespace Export.SQLExport
             return string.Format(createStatement, TableName, sbColumns.ToString());
         }
 
-        public string InsertRepresentationList(RepresentationList repList)
+        public string InsertRepresentationList(RepresentationList repList, bool truncateTable = false)
         {
             if(repList.Count == 0)
             {
@@ -93,7 +94,21 @@ namespace Export.SQLExport
                     sbValues.Append(")");
                 }
             }
-            return string.Format(insertStatement, TableName, sbColumn.ToString(), sbValues.ToString());
+            string insert = string.Format(insertStatement, TableName, sbColumn.ToString(), sbValues.ToString()); 
+
+            if (truncateTable)
+            {
+                return string.Format("{0} {1}", TruncateTable(), insert);
+            }
+            else
+            {
+                return insert;
+            }
+        }
+
+        public string TruncateTable()
+        {
+            return string.Format(truncateStatement, TableName);
         }
     }
 }

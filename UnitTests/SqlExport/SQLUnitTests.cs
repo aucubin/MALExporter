@@ -36,6 +36,19 @@ namespace UnitTest.SqlExport
             }
         }
 
+        private static void CreateInsertTableTestData(out Representation rep, out RepresentationList repList)
+        {
+            rep = CreateTestRepresentation();
+            repList = new RepresentationList(rep.Fields);
+            CreateMultipleRepresentationsFromRepList(ref repList, 3);
+            Representation firstItem = repList[0];
+            Representation secondItem = repList[1];
+            Representation thirdItem = repList[2];
+            OverwriteTestRepresentation(ref firstItem, true, "help", -100);
+            OverwriteTestRepresentation(ref secondItem, false, "nani", 200);
+            OverwriteTestRepresentation(ref thirdItem, true, "lel", -212);
+        }
+
         [Fact]
         public void CreateTableTest()
         {
@@ -49,21 +62,35 @@ namespace UnitTest.SqlExport
         [Fact]
         public void InsertTableTest()
         {
-            Representation rep = CreateTestRepresentation();
-            RepresentationList repList = new RepresentationList(rep.Fields);
-            CreateMultipleRepresentationsFromRepList(ref repList, 3);
-            Representation firstItem = repList[0];
-            Representation secondItem = repList[1];
-            Representation thirdItem = repList[2];
-            OverwriteTestRepresentation(ref firstItem, true, "help", -100);
-            OverwriteTestRepresentation(ref secondItem, false, "nani", 200);
-            OverwriteTestRepresentation(ref thirdItem, true, "lel", -212);
+            CreateInsertTableTestData(out Representation rep, out RepresentationList repList);
 
             SQLTable sql = new SQLTable("testTable", rep);
 
             string expectedInsertTableString = @"INSERT INTO testTable (test test2 thirdfield) VALUES \n (true 'help' -100),\n(false 'nani' 200),\n(true 'lel' -212);";
 
             Assert.Equal(expectedInsertTableString.Trim(), sql.InsertRepresentationList(repList).Trim());
+        }
+
+        [Fact]
+        public void TruncateTableTest()
+        {
+            SQLTable sql = new SQLTable("testTable", CreateTestRepresentation());
+
+            string expectedTruncateTableString = @"TRUNCATE testTable;";
+
+            Assert.Equal(expectedTruncateTableString.Trim(), sql.TruncateTable().Trim());
+        }
+
+        [Fact]
+        public void InsertTableWithTruncateTest()
+        {
+            CreateInsertTableTestData(out Representation rep, out RepresentationList repList);
+
+            SQLTable sql = new SQLTable("testTable", rep);
+
+            string expectedInsertTableString = @"TRUNCATE testTable; INSERT INTO testTable (test test2 thirdfield) VALUES \n (true 'help' -100),\n(false 'nani' 200),\n(true 'lel' -212);";
+
+            Assert.Equal(expectedInsertTableString.Trim(), sql.InsertRepresentationList(repList, true).Trim());
         }
     }
 }
