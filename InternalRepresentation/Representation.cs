@@ -60,6 +60,14 @@ namespace InternalRepresentation
             }
         }
 
+        public IEnumerable<Field> Fields
+        {
+            get
+            {
+                return _fields.Values;
+            }
+        }
+
         public IEnumerator<KeyValuePair<string,Field>> GetEnumerator()
         {
             return _fields.GetEnumerator();

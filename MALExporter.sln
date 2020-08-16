@@ -15,6 +15,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{A35B51
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CSVExport", "Export\CSVExport\CSVExport.csproj", "{6064EC33-452A-434C-A5F3-636D39F8B03B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLExport", "Export\SQLExport\SQLExport.csproj", "{BBB65608-6C68-4DAA-96D4-5B22452617CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,12 +43,17 @@ Global
 		{6064EC33-452A-434C-A5F3-636D39F8B03B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6064EC33-452A-434C-A5F3-636D39F8B03B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6064EC33-452A-434C-A5F3-636D39F8B03B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBB65608-6C68-4DAA-96D4-5B22452617CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBB65608-6C68-4DAA-96D4-5B22452617CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBB65608-6C68-4DAA-96D4-5B22452617CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBB65608-6C68-4DAA-96D4-5B22452617CF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{6064EC33-452A-434C-A5F3-636D39F8B03B} = {A35B5184-B859-4112-A8AD-F05B73439BB6}
+		{BBB65608-6C68-4DAA-96D4-5B22452617CF} = {A35B5184-B859-4112-A8AD-F05B73439BB6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {594F16E7-849A-4775-80B5-3C555C3FD4A8}

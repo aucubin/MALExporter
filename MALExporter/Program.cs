@@ -114,7 +114,7 @@ namespace MALExporter
 
             if (CSVFile != null)
             {
-                CSVExport export = new CSVExport(CSVFile, OverwriteFile, xml.ParsedXml);
+                Export.CSVExport.CSVMain export = new Export.CSVExport.CSVMain(CSVFile, OverwriteFile, xml.ParsedXml);
                 export.Export();
             }
             else

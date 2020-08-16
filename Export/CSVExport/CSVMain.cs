@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Export.CSVExport
 {
-    public class CSVExport
+    public class CSVMain
     {
         private readonly string FilePath;
         private readonly bool OverwriteFile;
@@ -16,7 +16,7 @@ namespace Export.CSVExport
         // (dictionary class from C# does not specify order in which its keys are ordered)
         private readonly List<string> fieldOrdering;
 
-        public CSVExport(string filePath, bool overwriteFile, RepresentationList representations)
+        public CSVMain(string filePath, bool overwriteFile, RepresentationList representations)
         {
             FilePath = filePath;
             OverwriteFile = overwriteFile;

@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using XmlParsing;
 using Export.CSVExport;
 
-namespace UnitTests.Export
+namespace UnitTests.CsvExportTests
 {
     public class CSVTests
     {
         private readonly string xmlFilePath = "XmlParsing" + Path.DirectorySeparatorChar + "TestFiles" + Path.DirectorySeparatorChar;
-        private readonly string csvFilePath = "Export" + Path.DirectorySeparatorChar + "TestFiles" + Path.DirectorySeparatorChar;
+        private readonly string csvFilePath = "CsvExport" + Path.DirectorySeparatorChar + "TestFiles" + Path.DirectorySeparatorChar;
 
         [Theory]
         [InlineData("SimpleXmlTest","SimpleXmlTest")]
@@ -33,7 +33,7 @@ namespace UnitTests.Export
 
             string actualFilePath = Directory.GetCurrentDirectory() + Path.DirectorySeparatorChar + Guid.NewGuid().ToString() + ".csv";
 
-            CSVExport csv = new CSVExport(actualFilePath, false, xml.ParsedXml);
+            CSVMain csv = new CSVMain(actualFilePath, false, xml.ParsedXml);
 
             csv.Export();
 

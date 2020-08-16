@@ -144,7 +144,7 @@ namespace InternalRepresentation
             switch (FieldType)
             {
                 case FieldType.Boolean:
-                    return BoolValue.ToString();
+                    return BoolValue.ToString().ToLower();
                 case FieldType.Integer:
                     return IntValue.ToString();
                 case FieldType.String:

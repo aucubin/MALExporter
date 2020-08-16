@@ -4,6 +4,10 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <AssemblyName>Export.SQLExport</AssemblyName>
+
+    <RootNamespace>Export.SQLExport</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,9 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Export\SQLExport\SQLExport.csproj" />
-    <ProjectReference Include="..\InternalRepresentation\InternalRepresentation.csproj" />
-    <ProjectReference Include="..\MALExporter\MalExporter.csproj" />
+    <ProjectReference Include="..\..\InternalRepresentation\InternalRepresentation.csproj" />
+    <ProjectReference Include="..\SQLExport\SQLExport.csproj" />
   </ItemGroup>
 
 </Project>
