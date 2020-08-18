@@ -1,7 +1,7 @@
 ﻿using CliFx;
 using CliFx.Attributes;
 using Export.CSVExport;
-using InternalRepresentation;
+using Export.SQLExport;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,67 +13,38 @@ namespace MALExporter
     {
         public static async Task<int> Main() =>
             await new CliApplicationBuilder().AddCommandsFromThisAssembly().Build().RunAsync();
+    }
 
-        internal static void TestMain()
+    internal static class BaseCommands
+    {
+        internal static XmlParser GetArgumentsAndParseXML(CommaSeperatedListWithAssignment fields, string tag, string fileName)
         {
-            HashSet<string> fieldsToParse = new HashSet<string>()
+            IEnumerable<Tuple<string, string>> outFields;
+            if (fields != null)
             {
-                "manga_title",
-                "manga_volumes",
-                "manga_chapters",
-                "my_read_volumes",
-                "my_read_chapters",
-                "my_score",
-                "my_times_read"
-            };
-
-            List<Tuple<string, string>> fieldsToParseRename = new List<Tuple<string, string>>()
-            {
-                new Tuple<string,string>("manga_title","Title"),
-                new Tuple<string,string>("manga_volumes","Volumes"),
-                new Tuple<string,string>("manga_chapters","Chapters"),
-                new Tuple<string,string>("my_read_volumes","Read Volumes"),
-                new Tuple<string,string>("my_read_chapters","Read Chapters"),
-                new Tuple<string,string>("my_score","Score"),
-                new Tuple<string,string>("my_times_read","Times Read")
-            };
-            XmlParser xml;
-            bool rename = true;
-            string path = @"C:\Users\aucubin\Downloads\mangalist_1595159211_-_4711685.xml\mangalist_1595159211_-_4711685.xml";
-            if (rename)
-            {
-                xml = new XmlParser(path, "manga", fieldsToParseRename);
+                outFields = fields.ParsedList;
             }
             else
             {
-                xml = new XmlParser(path, "manga", fieldsToParse);
+                List<Tuple<string, string>> tmpList = new List<Tuple<string, string>>();
+                foreach (string field in XmlParser.GenerateListOfAllFields(fileName, tag))
+                {
+                    tmpList.Add(new Tuple<string, string>(field, field));
+
+                }
+                outFields = tmpList;
             }
+
+            XmlParser xml = new XmlParser(fileName, tag, outFields);
+
             xml.ParseXML();
-            Console.WriteLine(xml.ParsedXml.ToString());
 
-            List<string> testFields = new List<string>()
-            {
-                "test1",
-                "test2",
-                "test3"
-            };
-
-            Representation r1 = new Representation(testFields);
-            Representation r2 = new Representation(testFields);
-
-            Console.WriteLine(r1.Equals(r2));
-
-            IEnumerable<string> test = XmlParser.GenerateListOfAllFields(path, "manga");
-
-            foreach(string s in test)
-            {
-                Console.WriteLine(s);
-            }
+            return xml;
         }
     }
 
-    [Command]
-    public class Command : ICommand
+    [Command("print", Description = "This command prints the XML Files to stdout")]
+    public class PrintCommand : ICommand
     {
         [CommandParameter(0, Description = "Filename of input file")]
         public string FileName { get; set; }
@@ -81,7 +52,29 @@ namespace MALExporter
         [CommandParameter(1, Description = "XML Tag to start parsing from")]
         public string Tag { get; set; }
 
-        [CommandOption("csv", Description = "Filename of csv to export into")]
+        [CommandOption("fields", 'f', Description = "Optional comma seperated list with fields to read in and optional rewriting scheme")]
+        public CommaSeperatedListWithAssignment Fields { get; set; }
+
+        public ValueTask ExecuteAsync(IConsole console)
+        {
+            XmlParser xml = BaseCommands.GetArgumentsAndParseXML(Fields, Tag, FileName);
+            console.Output.WriteLine(xml.ParsedXml.ToString());
+
+            return default;
+        }
+    }
+
+
+    [Command("csv", Description = "This command exports the XML File into an CSV File")]
+    public class CSVCommand : ICommand
+    {
+        [CommandParameter(0, Description = "Filename of input file")]
+        public string FileName { get; set; }
+
+        [CommandParameter(1, Description = "XML Tag to start parsing from")]
+        public string Tag { get; set; }
+
+        [CommandParameter(2, Description = "Filename of csv to export into")]
         public string CSVFile { get; set; }
 
         [CommandOption("fields", 'f', Description = "Optional comma seperated list with fields to read in and optional rewriting scheme")]
@@ -92,46 +85,47 @@ namespace MALExporter
 
         public ValueTask ExecuteAsync(IConsole console)
         {
-            IEnumerable<Tuple<string, string>> outFields;
-            if (Fields != null)
-            {
-                outFields = Fields.ParsedList;
-            }
-            else
-            {
-                List<Tuple<string, string>> tmpList = new List<Tuple<string, string>>();
-                foreach (string field in XmlParser.GenerateListOfAllFields(FileName, Tag))
-                {
-                    tmpList.Add(new Tuple<string, string>(field, field));
+            XmlParser xml = BaseCommands.GetArgumentsAndParseXML(Fields, Tag, FileName);
 
-                }
-                outFields = tmpList;
-            }
-
-            XmlParser xml = new XmlParser(FileName, Tag, outFields);
-
-            xml.ParseXML();
-
-            if (CSVFile != null)
-            {
-                Export.CSVExport.CSVMain export = new Export.CSVExport.CSVMain(CSVFile, OverwriteFile, xml.ParsedXml);
-                export.Export();
-            }
-            else
-            {
-                console.Output.WriteLine(xml.ParsedXml.ToString());
-            }
+            CSVMain export = new CSVMain(CSVFile, OverwriteFile, xml.ParsedXml);
+            export.Export();
 
             return default;
         }
     }
 
-    [Command("test")]
-    public class TestCommand : ICommand
+    [Command("sql", Description = "This command exports the XML File into an SQL Database")]
+    public class SQLCommand : ICommand
     {
+        [CommandParameter(0, Description = "Filename of input file")]
+        public string FileName { get; set; }
+
+        [CommandParameter(1, Description = "XML Tag to start parsing from")]
+        public string Tag { get; set; }
+
+        [CommandParameter(2, Description = "Connection String for PostgreSQL Database to export into")]
+        public string SQLConnectionString { get; set; }
+
+        [CommandParameter(3, Description = "Table name to export into")]
+        public string TableName { get; set; }
+
+        [CommandOption("fields", 'f', Description = "Optional comma seperated list with fields to read in and optional rewriting scheme")]
+        public CommaSeperatedListWithAssignment Fields { get; set; }
+
+        [CommandOption("force", Description = "Overwrite table and data if it already exists")]
+        public bool OverwriteSQL { get; set; }
+
         public ValueTask ExecuteAsync(IConsole console)
         {
-            Program.TestMain();
+            XmlParser xml = BaseCommands.GetArgumentsAndParseXML(Fields, Tag, FileName);
+
+            SQLMain export = new SQLMain(SQLConnectionString, TableName, xml.ParsedXml[0]);
+
+            export.CreateTable(OverwriteSQL);
+            int rows = export.InsertTable(xml.ParsedXml, OverwriteSQL);
+
+            console.Output.WriteLine(string.Format("{0} rows inserted on export", rows));
+
             return default;
         }
     }

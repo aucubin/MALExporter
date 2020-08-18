@@ -22,9 +22,9 @@ namespace UnitTests.CommandTypesAndCLI
             await using var stdOut = new MemoryStream();
             var console = new VirtualConsole(output: stdOut);
             
-            var app = new CliApplicationBuilder().AddCommand(typeof(MALExporter.Command)).UseConsole(console).Build();
+            var app = new CliApplicationBuilder().AddCommand(typeof(MALExporter.PrintCommand)).UseConsole(console).Build();
 
-            var args = new string[] {xmlPath, "child" };
+            var args = new string[] {"print", xmlPath, "child" };
 
             await app.RunAsync(args);
 

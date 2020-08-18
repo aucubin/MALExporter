@@ -54,7 +54,7 @@ namespace UnitTest.SqlExport
         {
             SQLTable sql = new SQLTable("testTable", CreateTestRepresentation());
 
-            string expectedCreateTableString = @"CREATE TABLE testTable \n (test boolean test2 text thirdfield integer);";
+            string expectedCreateTableString = @"CREATE TABLE testTable (test boolean, test2 text, thirdfield integer);";
 
             Assert.Equal(expectedCreateTableString.Trim(), sql.CreateTable().Trim());
         }
@@ -66,7 +66,7 @@ namespace UnitTest.SqlExport
 
             SQLTable sql = new SQLTable("testTable", rep);
 
-            string expectedInsertTableString = @"INSERT INTO testTable (test test2 thirdfield) VALUES \n (true 'help' -100),\n(false 'nani' 200),\n(true 'lel' -212);";
+            string expectedInsertTableString = @"INSERT INTO testTable (test, test2, thirdfield) VALUES (true, 'help', -100), (false, 'nani', 200), (true, 'lel', -212);";
 
             Assert.Equal(expectedInsertTableString.Trim(), sql.InsertRepresentationList(repList).Trim());
         }
@@ -82,13 +82,23 @@ namespace UnitTest.SqlExport
         }
 
         [Fact]
+        public void DropTableTest()
+        {
+            SQLTable sql = new SQLTable("testTable", CreateTestRepresentation());
+
+            string expecetedDropTableTstring = @"DROP TABLE testTable;";
+
+            Assert.Equal(expecetedDropTableTstring.Trim(), sql.DropTable().Trim());
+        }
+
+        [Fact]
         public void InsertTableWithTruncateTest()
         {
             CreateInsertTableTestData(out Representation rep, out RepresentationList repList);
 
             SQLTable sql = new SQLTable("testTable", rep);
 
-            string expectedInsertTableString = @"TRUNCATE testTable; INSERT INTO testTable (test test2 thirdfield) VALUES \n (true 'help' -100),\n(false 'nani' 200),\n(true 'lel' -212);";
+            string expectedInsertTableString = @"TRUNCATE testTable; INSERT INTO testTable (test, test2, thirdfield) VALUES (true, 'help', -100), (false, 'nani', 200), (true, 'lel', -212);";
 
             Assert.Equal(expectedInsertTableString.Trim(), sql.InsertRepresentationList(repList, true).Trim());
         }

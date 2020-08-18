@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Web;
 using InternalRepresentation;
 
 namespace Export.SQLExport
@@ -10,9 +11,10 @@ namespace Export.SQLExport
         private List<SQLColumn> RepresentationToSQLMapping;
         private readonly string TableName;
 
-        private const string createStatement = @"CREATE TABLE {0} \n ({1}); ";
-        private const string insertStatement = @"INSERT INTO {0} ({1}) VALUES \n {2};";
+        private const string createStatement = @"CREATE TABLE {0} ({1});";
+        private const string insertStatement = @"INSERT INTO {0} ({1}) VALUES {2};";
         private const string truncateStatement = @"TRUNCATE {0};";
+        private const string dropStatement = @"DROP TABLE {0};";
 
         public SQLTable(string tableName, Representation basisRepresentation)
         {
@@ -25,21 +27,35 @@ namespace Export.SQLExport
             }
         }
 
-        public string CreateTable()
+        public string DropTable()
+        {
+            return string.Format(dropStatement, TableName);
+        }
+
+        public string CreateTable(bool dropTable = false)
         {
             StringBuilder sbColumns = new StringBuilder();
             foreach(var sqlMember in RepresentationToSQLMapping)
             {
                 if(sbColumns.Length != 0)
                 {
-                    sbColumns.Append(" ");
+                    sbColumns.Append(", ");
                 }
                 sbColumns.Append(sqlMember.ColumnName);
                 sbColumns.Append(" ");
                 sbColumns.Append(sqlMember.SQLType);
             }
 
-            return string.Format(createStatement, TableName, sbColumns.ToString());
+            string create = string.Format(createStatement, TableName, sbColumns.ToString());
+
+            if (dropTable)
+            {
+                return string.Format("{0} {1}", DropTable(), create);
+            }
+            else
+            {
+                return create;
+            }
         }
 
         public string InsertRepresentationList(RepresentationList repList, bool truncateTable = false)
@@ -55,7 +71,7 @@ namespace Export.SQLExport
             {
                 if(sbColumn.Length != 0)
                 {
-                    sbColumn.Append(" ");
+                    sbColumn.Append(", ");
                 }
                 sbColumn.Append(column.ColumnName);
             }
@@ -65,14 +81,14 @@ namespace Export.SQLExport
             {
                 if(sbValues.Length != 1)
                 {
-                    sbValues.Append(@",\n(");
+                    sbValues.Append(@", (");
                 }
                 bool firstMember = true;
                 foreach(var sqlMember in RepresentationToSQLMapping)
                 {
                     if (!firstMember)
                     {
-                        sbValues.Append(" ");
+                        sbValues.Append(", ");
                     }
                     else
                     {
@@ -83,7 +99,7 @@ namespace Export.SQLExport
                     {
                         sbValues.Append('\'');
                     }
-                    sbValues.Append(field.ValueAsString());
+                    sbValues.Append(HttpUtility.JavaScriptStringEncode(field.ValueAsString()));
                     if (field.FieldType == FieldType.String)
                     {
                         sbValues.Append('\'');

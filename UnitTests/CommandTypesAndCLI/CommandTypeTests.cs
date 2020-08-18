@@ -24,7 +24,7 @@ namespace UnitTests.CommandTypesAndCLI
         [Fact]
         public void EmptyFieldsTest()
         {
-            var CommandTest = new Command();
+            var CommandTest = new CSVCommand();
 
             Assert.Throws<System.ArgumentException>(() => CommandTest.Fields = new CommaSeperatedListWithAssignment(string.Empty));
         }
@@ -45,7 +45,7 @@ namespace UnitTests.CommandTypesAndCLI
         [InlineData("key=value,key2=value2", new string[] { "key", "key2" }, new string[] { "value", "value2" })]
         public void OutFieldsTest(string outfieldValue, string[] parsedOutFieldKey, string[] parsedOutFieldValue)
         {
-            var CommandTest = new Command();
+            var CommandTest = new CSVCommand();
 
             CommandTest.Fields = new CommaSeperatedListWithAssignment(outfieldValue);
 
